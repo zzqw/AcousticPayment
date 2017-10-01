@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.scut.srp.acousticpayment.ProceedActivity">
+
+    <Button
+        android:id="@+id/back2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="返回" />
+
+    <Button
+        android:id="@+id/rcv_voice2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="接收" />
+
+    <TextView
+        android:id="@+id/count_ttv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="149dp"
+        android:text="金额："
+        android:layout_below="@+id/back2"
+        android:layout_toRightOf="@+id/back2"
+        android:layout_toEndOf="@+id/back2" />
+
+    <EditText
+        android:id="@+id/count_edt2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="请输入收款金额"
+        android:inputType="textPersonName"
+        android:layout_alignBaseline="@+id/count_ttv2"
+        android:layout_alignBottom="@+id/count_ttv2"
+        android:layout_toRightOf="@+id/count_ttv2"
+        android:layout_toEndOf="@+id/count_ttv2" />
+
+    <Button
+        android:id="@+id/send_voice2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="65dp"
+        android:text="发送"
+        android:layout_below="@+id/count_edt2"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

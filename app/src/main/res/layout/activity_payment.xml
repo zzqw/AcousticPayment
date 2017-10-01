@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.scut.srp.acousticpayment.PaymentActivity">
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="返回" />
+
+    <Button
+        android:id="@+id/rcv_voice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="接收" />
+
+    <TextView
+        android:id="@+id/count_ttv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/back"
+        android:layout_marginTop="110dp"
+        android:layout_toEndOf="@+id/back"
+        android:layout_toRightOf="@+id/back"
+        android:text="金额：" />
+
+    <TextView
+        android:id="@+id/pay_psd_ttv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/count_ttv"
+        android:layout_alignRight="@+id/count_ttv"
+        android:layout_below="@+id/count_ttv"
+        android:layout_marginTop="35dp"
+        android:text="密码：" />
+
+    <EditText
+        android:id="@+id/count_edt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="请输入付款金额"
+        android:inputType="textPersonName"
+        android:layout_alignBaseline="@+id/count_ttv"
+        android:layout_alignBottom="@+id/count_ttv"
+        android:layout_toRightOf="@+id/count_ttv"
+        android:layout_toEndOf="@+id/count_ttv" />
+
+    <EditText
+        android:id="@+id/pay_psd_edt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="请输入支付密码"
+        android:inputType="numberPassword"
+        android:layout_alignBaseline="@+id/pay_psd_ttv"
+        android:layout_alignBottom="@+id/pay_psd_ttv"
+        android:layout_toRightOf="@+id/pay_psd_ttv"
+        android:layout_toEndOf="@+id/pay_psd_ttv" />
+
+    <Button
+        android:id="@+id/send_voice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pay_psd_edt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="66dp"
+        android:text="发送" />
+</RelativeLayout>
