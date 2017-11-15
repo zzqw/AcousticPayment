@@ -51,7 +51,26 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="65dp"
         android:text="发送"
+        android:enabled="false"
         android:layout_below="@+id/count_edt2"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/count_edt2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="53dp"
+        android:text="请先点击接收按钮，接收付款方ID" />
+
+    <TextView
+        android:id="@+id/payID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/count_edt2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp"
+        android:text="等待接收付款方ID" />
 
 </RelativeLayout>

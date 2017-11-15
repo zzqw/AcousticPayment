@@ -21,7 +21,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="接收" />
+        android:text="发送" />
 
     <TextView
         android:id="@+id/count_ttv"
@@ -43,13 +43,12 @@
         android:layout_marginTop="35dp"
         android:text="密码：" />
 
-    <EditText
+    <TextView
         android:id="@+id/count_edt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="请输入付款金额"
-        android:inputType="textPersonName"
+        android:hint="请等待接收付款金额"
         android:layout_alignBaseline="@+id/count_ttv"
         android:layout_alignBottom="@+id/count_ttv"
         android:layout_toRightOf="@+id/count_ttv"
@@ -74,5 +73,15 @@
         android:layout_below="@+id/pay_psd_edt"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="66dp"
-        android:text="发送" />
+        android:enabled="false"
+        android:text="付款" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/count_edt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="34dp"
+        android:text="请先点击发送按钮，等待接收需付金额" />
 </RelativeLayout>

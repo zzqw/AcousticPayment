@@ -8,22 +8,28 @@
         android:id="@+id/pay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_marginTop="92dp"
+        android:text="付款"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="64dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="197dp"
-        android:text="付款" />
+        android:layout_alignLeft="@+id/receive"
+        android:layout_alignStart="@+id/receive" />
 
     <Button
         android:id="@+id/receive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/pay"
-        android:layout_marginEnd="62dp"
-        android:layout_marginRight="62dp"
-        android:text="收款" />
+        android:text="收款"
+        android:layout_below="@+id/pay"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="41dp" />
+
+    <Button
+        android:id="@+id/check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/receive"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        android:text="余额" />
+
 </RelativeLayout>
