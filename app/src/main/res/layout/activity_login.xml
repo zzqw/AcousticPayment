@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.scut.srp.acousticpayment.LoginActivity">
+
+    <TextView
+        android:id="@+id/account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="70dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="120dp"
+        android:text="账号："
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/account"
+        android:layout_alignRight="@+id/account"
+        android:layout_below="@+id/account"
+        android:layout_marginTop="49dp"
+        android:text="密码："
+        android:textSize="18dp"/>
+
+    <EditText
+        android:id="@+id/userID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="请输入用户ID"
+        android:inputType="textPersonName"
+        android:layout_alignBaseline="@+id/account"
+        android:layout_alignBottom="@+id/account"
+        android:layout_toRightOf="@+id/account"
+        android:layout_toEndOf="@+id/account" />
+
+    <EditText
+        android:id="@+id/login_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="请输入密码"
+        android:inputType="textPassword"
+        android:layout_alignBaseline="@+id/textView6"
+        android:layout_alignBottom="@+id/textView6"
+        android:layout_toRightOf="@+id/textView6"
+        android:layout_toEndOf="@+id/textView6" />
+
+    <Button
+        android:id="@+id/login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView6"
+        android:layout_alignStart="@+id/textView6"
+        android:layout_below="@+id/login_password"
+        android:layout_marginTop="55dp"
+        android:text="登录" />
+
+    <Button
+        android:id="@+id/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/login_password"
+        android:layout_alignRight="@+id/login_password"
+        android:layout_alignTop="@+id/login"
+        android:text="注册" />
+</RelativeLayout>
