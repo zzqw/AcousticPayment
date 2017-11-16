@@ -40,7 +40,7 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
     private BufferedReader reader;
     private String stateCode;
     private String RSA_message;
-    private String payID="";
+    private String payID;
 
     private final static String TAG = "MainActivity";
     private final static String CODEBOOK = "12345";
@@ -75,6 +75,8 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mSinVoicePlayer.stop();
+                mRecognition.stop();
                 Intent intent = new Intent();
                 intent.setClass(ProceedActivity.this,IndexActivity.class);
                 intent.putExtras(bundle1);
@@ -179,14 +181,14 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
                     @Override
                     public void run() {
                         while (true) {
-                            if (!payID.equals("")) {
+                            if (!payID.equals("01")) {
                                 mSinVoicePlayer.play(VoiceOutHelper.modify("54321"), true, 1000);
                                 new Thread() {
                                     @Override
                                     public void run() {
                                         super.run();
                                         try {
-                                            Thread.sleep(3000);
+                                            Thread.sleep(1000);
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }
@@ -225,7 +227,7 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
             @Override
             public void run() {
                 payID_txt.setText("等待接收付款方ID");
-                payID="";
+                payID="01";
             }
         });
         Log.v(TAG, "start");

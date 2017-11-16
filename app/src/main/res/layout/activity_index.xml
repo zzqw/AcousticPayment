@@ -32,4 +32,14 @@
         android:layout_marginTop="45dp"
         android:text="余额" />
 
+    <Button
+        android:id="@+id/test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/check"
+        android:layout_alignStart="@+id/check"
+        android:layout_below="@+id/check"
+        android:layout_marginTop="41dp"
+        android:text="声波测试" />
+
 </RelativeLayout>

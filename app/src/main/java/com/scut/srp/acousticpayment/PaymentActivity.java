@@ -79,6 +79,8 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mSinVoicePlayer.stop();
+                mRecognition.stop();
                 Intent intent = new Intent();
                 intent.setClass(PaymentActivity.this,IndexActivity.class);
                 intent.putExtras(bundle1);

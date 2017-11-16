@@ -23,6 +23,7 @@ public class IndexActivity extends AppCompatActivity {
     private Button pay;
     private Button receive;
     private Button check;
+    private Button test;
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader reader;
@@ -32,6 +33,7 @@ public class IndexActivity extends AppCompatActivity {
         pay=(Button)findViewById(R.id.pay);
         receive=(Button)findViewById(R.id.receive);
         check=(Button)findViewById(R.id.check);
+        test=(Button)findViewById(R.id.test);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,15 @@ public class IndexActivity extends AppCompatActivity {
                 intent.putExtras(bundle1);
                 startActivity(intent);
                 IndexActivity.this.finish();
+            }
+        });
+        test.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(IndexActivity.this,Test.class);
+                intent.putExtras(bundle1);
+                startActivity(intent);
             }
         });
         receive.setOnClickListener(new View.OnClickListener(){
