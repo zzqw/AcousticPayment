@@ -104,8 +104,8 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
                 }else {
                     String md5_pay_password = md5(pay_password);
                     now = System.currentTimeMillis();
-                    String md5_message = md5(bundle.getString("userID") + " " + bundle.getString("login_password") + " " + now + " " + md5_pay_password);
-                    message =md5_message + " " + bundle.getString("userID") + " " + now+" "+receive_message[1]+" "+receive_message[0];
+                    String md5_message = md5( md5_pay_password + " " + now + " " + bundle.getString("userID"));
+                    message ="tradeFromPayer "+" "+receive_message[0]+" "+  bundle.getString("userID") + " " + now+" "+receive_message[1]+ " "+"content" +md5_message;
                     Toast.makeText(PaymentActivity.this, message, Toast.LENGTH_LONG).show();
                     new Thread(new Runnable() {
                         @Override
@@ -177,24 +177,28 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
         receive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSinVoicePlayer.play(VoiceOutHelper.modify("111"), true, 1000);
+                mSinVoicePlayer.play(VoiceOutHelper.modify("12345"), true, 1000);
                 mRecognition.start();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         while(true){
-                            if (proceedID.equals("11111")){
+                            if (proceedID.equals("54321")){
                                 mSinVoicePlayer.stop();
                                 mRecognition.stop();
                                 break;
                             }
                         }
+
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
                                 try {
                                     socket = new Socket(ServerIP, PORT);
+                                    writer = new PrintWriter(socket.getOutputStream(), true);
                                     reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                                    writer.println("readyForTrade"+" "+bundle.getString("userID"));
+                                    writer.flush();
                                     while (true) {
                                         count = reader.readLine();
                                         if (count != null) {

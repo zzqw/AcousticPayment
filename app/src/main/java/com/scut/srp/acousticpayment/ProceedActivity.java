@@ -97,13 +97,13 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
                             }).show();
                 }else {
                     now = System.currentTimeMillis();
-                    message ="tradeFromPayee" +" " + payID_txt.getText().toString().trim() + " " + bundle.getString("userID") + " " + "content" + " "+now + count_edt.getText().toString().trim();
+                    RSA_message = bundle.getString("userID") + " " + payID_txt.getText().toString().trim() + " "+now + count_edt.getText().toString().trim();
                     try {
-                        RSA_message = bundle.getString("userID") + " " + new String(RSAUtil.encryptByPublicKey(message.getBytes(),bundle.getString("RSA")));
+                        message = "tradeFromPayee" +" " + bundle.getString("userID") + " " + new String(RSAUtil.encryptByPublicKey(RSA_message.getBytes(),bundle.getString("RSA")));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(ProceedActivity.this, RSA_message, Toast.LENGTH_LONG).show();
+                    Toast.makeText(ProceedActivity.this, message, Toast.LENGTH_LONG).show();
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -111,7 +111,7 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
                                 socket = new Socket(ServerIP, PORT);
                                 writer = new PrintWriter(socket.getOutputStream(), true);
                                 reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                                writer.println(RSA_message);
+                                writer.println(message);
                                 writer.flush();
                                 while (true) {
                                     stateCode = reader.readLine();
@@ -175,13 +175,12 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
             @Override
             public void onClick(View v) {
                 mRecognition.start();
-                mSinVoicePlayer.play(VoiceOutHelper.modify("11111"), true, 1000);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         while (true) {
                             if (!payID.equals("")) {
-                                mSinVoicePlayer.play(VoiceOutHelper.modify("11111"), true, 1000);
+                                mSinVoicePlayer.play(VoiceOutHelper.modify("54321"), true, 1000);
                                 new Thread() {
                                     @Override
                                     public void run() {
@@ -194,7 +193,6 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
                                         mSinVoicePlayer.stop();
                                     }
                                 }.start();
-                                mRecognition.stop();
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -202,6 +200,7 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
                                         payID_txt.setText(payID);
                                     }
                                 });
+                                mRecognition.stop();
                                 break;
                             }
                         }
