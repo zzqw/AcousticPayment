@@ -47,7 +47,7 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
     private String[] receive_message;
     private final static String TAG = "MainActivity";
     private final static String CODEBOOK = "12345";
-    private String proceedID = "00000";
+    private String proceedID = "";
 
     private void init(){
         back=(Button)findViewById(R.id.back);
@@ -243,13 +243,27 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
     }
     @Override
     public void onRegStart() {
-        proceedID = "00000";
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+//                payID_txt=(TextView)findViewById(R.id.payID);
+//                payID_txt.setText(string);
+                proceedID="";
+            }
+        });
         Log.v(TAG, "start");
     }
 
     @Override
     public void onResult(final String result) {
-        proceedID = result;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+//                payID_txt=(TextView)findViewById(R.id.payID);
+//                payID_txt.setText(string);
+                proceedID=result;
+            }
+        });
     }
 
 }

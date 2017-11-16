@@ -40,7 +40,8 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
     private BufferedReader reader;
     private String stateCode;
     private String RSA_message;
-    private String payID;
+    private String payID="";
+    private String string="等待接收付款方ID";
 
     private final static String TAG = "MainActivity";
     private final static String CODEBOOK = "12345";
@@ -181,12 +182,12 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
                     @Override
                     public void run() {
                         while (true) {
-                            if (!payID.equals("01")) {
+                            if (!payID.equals("")) {
+                                mRecognition.stop();
                                 mSinVoicePlayer.play(VoiceOutHelper.modify("54321"), true, 1000);
                                 new Thread() {
                                     @Override
                                     public void run() {
-                                        super.run();
                                         try {
                                             Thread.sleep(1000);
                                         } catch (InterruptedException e) {
@@ -199,10 +200,8 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
                                     @Override
                                     public void run() {
                                         send.setEnabled(true);
-                                        payID_txt.setText(payID);
                                     }
                                 });
-                                mRecognition.stop();
                                 break;
                             }
                         }
@@ -226,8 +225,9 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                payID_txt.setText("等待接收付款方ID");
-                payID="01";
+                payID_txt=(TextView)findViewById(R.id.payID);
+                payID_txt.setText(string);
+                payID="";
             }
         });
         Log.v(TAG, "start");
@@ -235,6 +235,13 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
 
     @Override
     public void onResult(final String result) {
-        payID=result;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                payID_txt=(TextView)findViewById(R.id.payID);
+                payID_txt.setText(result);
+                payID=result;
+            }
+        });
     }
 }
