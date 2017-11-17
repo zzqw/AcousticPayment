@@ -88,6 +88,7 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
                 PaymentActivity.this.finish();
             }
         });
+        send.setEnabled(true);
         send.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
@@ -181,18 +182,18 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
         receive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSinVoicePlayer.play(VoiceOutHelper.modify(bundle.getString("userID")), true, 1000);
-                new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(5000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        mSinVoicePlayer.stop();
-                    }
-                }.start();
+//                mSinVoicePlayer.play(VoiceOutHelper.modify(bundle.getString("userID")), true, 1000);
+//                new Thread() {
+//                    @Override
+//                    public void run() {
+//                        try {
+//                            Thread.sleep(5000);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                        mSinVoicePlayer.stop();
+//                    }
+//                }.start();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

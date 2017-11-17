@@ -1,18 +1,18 @@
 package com.scut.srp.acousticpayment;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Handler;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.scut.srp.acousticpayment.sinvoice.LogHelper;
 import com.scut.srp.acousticpayment.sinvoice.SinVoicePlayer;
 import com.scut.srp.acousticpayment.sinvoice.SinVoiceRecognition;
@@ -26,7 +26,7 @@ import java.net.Socket;
 import static com.scut.srp.acousticpayment.LoginActivity.PORT;
 import static com.scut.srp.acousticpayment.LoginActivity.ServerIP;
 
-public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer.Listener, VoiceInHelper.Listener {
+public class ProceedActivity extends Activity implements SinVoicePlayer.Listener, VoiceInHelper.Listener {
 
     private Button back;
     private Button send;
@@ -73,7 +73,7 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
         bundle1.putCharSequence("RSA",bundle.getString("RSA"));
         bundle1.putCharSequence("userID",bundle.getString("userID"));
         bundle1.putCharSequence("login_password",bundle.getString("login_password"));
-        back.setOnClickListener(new View.OnClickListener() {
+        back.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mSinVoicePlayer.stop();
@@ -85,9 +85,11 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
                 ProceedActivity.this.finish();
             }
         });
-        send.setOnClickListener(new View.OnClickListener() {
+        send.setEnabled(true);
+        send.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                payID_txt.setText("111");
                 if (count_edt.getText().toString().trim().equals("")){
                     new AlertDialog.Builder(ProceedActivity.this)
                             .setTitle("系统消息")
@@ -102,11 +104,11 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
                     now = System.currentTimeMillis();
                     RSA_message = bundle.getString("userID") + " " + payID_txt.getText().toString().trim() + " "+now+ " " + count_edt.getText().toString().trim()+ " "+"content";
                     try {
-                        message = "tradeFromPayee" +" " + bundle.getString("userID") + " " + new String(RSAUtil.encryptByPublicKey(RSA_message.getBytes(),bundle.getString("RSA")));
+                        message = "tradeFromPayee" +" " + bundle.getString("userID") + " " + new String(RSAUtil.encryptByPublicKey(RSA_message.getBytes(),bundle.getString("RSA")),"ISO-8859-1");
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Toast.makeText(ProceedActivity.this, "转码失败", Toast.LENGTH_LONG).show();
                     }
-                    Toast.makeText(ProceedActivity.this, RSA_message, Toast.LENGTH_LONG).show();
+                    Toast.makeText(ProceedActivity.this, message, Toast.LENGTH_LONG).show();
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -118,47 +120,50 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
                                 writer.flush();
                                 while (true) {
                                     stateCode = reader.readLine();
-                                    if (stateCode.contains("Error")) {
-                                        handler.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                new AlertDialog.Builder(ProceedActivity.this)
-                                                        .setTitle("系统消息")
-                                                        .setMessage("交易失败！")
-                                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                Intent intent = new Intent();
-                                                                intent.setClass(ProceedActivity.this, IndexActivity.class);
-                                                                intent.putExtras(bundle1);
-                                                                startActivity(intent);
-                                                                ProceedActivity.this.finish();
-                                                            }
-                                                        }).show();
-                                            }
-                                        });
-                                        break;
-                                    } else {
-                                        handler.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                new AlertDialog.Builder(ProceedActivity.this)
-                                                        .setTitle("系统消息")
-                                                        .setMessage("交易成功！")
-                                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                Intent intent = new Intent();
-                                                                intent.setClass(ProceedActivity.this, IndexActivity.class);
-                                                                intent.putExtras(bundle1);
-                                                                startActivity(intent);
-                                                                ProceedActivity.this.finish();
-                                                            }
-                                                        }).show();
-                                            }
-                                        });
-                                        break;
+                                    if (stateCode!=null){
+                                        if (stateCode.contains("Error")) {
+                                            handler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    new AlertDialog.Builder(ProceedActivity.this)
+                                                            .setTitle("系统消息")
+                                                            .setMessage("交易失败！")
+                                                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    Intent intent = new Intent();
+                                                                    intent.setClass(ProceedActivity.this, IndexActivity.class);
+                                                                    intent.putExtras(bundle1);
+                                                                    startActivity(intent);
+                                                                    ProceedActivity.this.finish();
+                                                                }
+                                                            }).show();
+                                                }
+                                            });
+                                            break;
+                                        } else {
+                                            handler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    new AlertDialog.Builder(ProceedActivity.this)
+                                                            .setTitle("系统消息")
+                                                            .setMessage("交易成功！")
+                                                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    Intent intent = new Intent();
+                                                                    intent.setClass(ProceedActivity.this, IndexActivity.class);
+                                                                    intent.putExtras(bundle1);
+                                                                    startActivity(intent);
+                                                                    ProceedActivity.this.finish();
+                                                                }
+                                                            }).show();
+                                                }
+                                            });
+                                            break;
+                                        }
                                     }
+
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -175,7 +180,7 @@ public class ProceedActivity extends AppCompatActivity implements SinVoicePlayer
                 }
             }
         });
-        receive.setOnClickListener(new View.OnClickListener() {
+        receive.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mRecognition.start();
