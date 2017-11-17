@@ -120,47 +120,49 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
                             writer.flush();
                             while (true) {
                                 stateCode = reader.readLine();
-                                if (stateCode != null) break;
+                                if (stateCode.contains("Error")) {
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new AlertDialog.Builder(PaymentActivity.this)
+                                                    .setTitle("系统消息")
+                                                    .setMessage("交易失败！")
+                                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            Intent intent = new Intent();
+                                                            intent.setClass(PaymentActivity.this, IndexActivity.class);
+                                                            intent.putExtras(bundle1);
+                                                            startActivity(intent);
+                                                            PaymentActivity.this.finish();
+                                                        }
+                                                    }).show();
+                                        }
+                                    });
+                                    break;
+                                } else {
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new AlertDialog.Builder(PaymentActivity.this)
+                                                    .setTitle("系统消息")
+                                                    .setMessage("交易成功！")
+                                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            Intent intent = new Intent();
+                                                            intent.setClass(PaymentActivity.this, IndexActivity.class);
+                                                            intent.putExtras(bundle1);
+                                                            startActivity(intent);
+                                                            PaymentActivity.this.finish();
+                                                        }
+                                                    }).show();
+                                        }
+                                    });
+                                    break;
+                                }
                             }
-                            if (stateCode.equals("loginFailed")) {
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        new AlertDialog.Builder(PaymentActivity.this)
-                                                .setTitle("系统消息")
-                                                .setMessage("交易失败！")
-                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        Intent intent = new Intent();
-                                                        intent.setClass(PaymentActivity.this, IndexActivity.class);
-                                                        intent.putExtras(bundle1);
-                                                        startActivity(intent);
-                                                        PaymentActivity.this.finish();
-                                                    }
-                                                }).show();
-                                    }
-                                });
-                            } else {
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        new AlertDialog.Builder(PaymentActivity.this)
-                                                .setTitle("系统消息")
-                                                .setMessage("交易成功！")
-                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        Intent intent = new Intent();
-                                                        intent.setClass(PaymentActivity.this, IndexActivity.class);
-                                                        intent.putExtras(bundle1);
-                                                        startActivity(intent);
-                                                        PaymentActivity.this.finish();
-                                                    }
-                                                }).show();
-                                    }
-                                });
-                            }
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         } finally {
@@ -179,53 +181,50 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
         receive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSinVoicePlayer.play(VoiceOutHelper.modify("12345"), true, 1000);
-                mRecognition.start();
+                mSinVoicePlayer.play(VoiceOutHelper.modify(bundle.getString("userID")), true, 1000);
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(5000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        mSinVoicePlayer.stop();
+                    }
+                }.start();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        while(true){
-                            if (proceedID.equals("54321")){
-                                mSinVoicePlayer.stop();
-                                mRecognition.stop();
-                                break;
-                            }
-                        }
-
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    socket = new Socket(ServerIP, PORT);
-                                    writer = new PrintWriter(socket.getOutputStream(), true);
-                                    reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                                    writer.println("readyForTrade"+" "+bundle.getString("userID"));
-                                    writer.flush();
-                                    while (true) {
-                                        count = reader.readLine();
-                                        if (count != null) {
-                                            break;
-                                        }
-                                    }
-                                    handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            receive_message = count.split(" ");
-                                            count_edt.setText(receive_message[0]);
-                                            send.setEnabled(true);
-                                        }
-                                    });
-                                }catch (IOException e) {
-                                    e.printStackTrace();
-                                }finally {
-                                    try {
-                                        socket.close();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                        try {
+                            socket = new Socket(ServerIP, PORT);
+                            writer = new PrintWriter(socket.getOutputStream(), true);
+                            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                            writer.println("readyForTrade"+" "+bundle.getString("userID"));
+                            writer.flush();
+                            while (true) {
+                                count = reader.readLine();
+                                if (count != null) {
+                                    break;
                                 }
                             }
-                        }).start();
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    receive_message = count.split(" ");
+                                    count_edt.setText(receive_message[0]);
+                                    send.setEnabled(true);
+                                }
+                            });
+                        }catch (IOException e) {
+                            e.printStackTrace();
+                        }finally {
+                            try {
+                                socket.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 }).start();
             }
