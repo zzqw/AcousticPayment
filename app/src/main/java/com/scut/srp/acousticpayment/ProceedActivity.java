@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.scut.srp.acousticpayment.sinvoice.LogHelper;
 import com.scut.srp.acousticpayment.sinvoice.SinVoicePlayer;
 import com.scut.srp.acousticpayment.sinvoice.SinVoiceRecognition;
@@ -70,7 +71,7 @@ public class ProceedActivity extends Activity implements SinVoicePlayer.Listener
         final Bundle bundle = intent.getExtras();
         final Bundle bundle1 = new Bundle();
         final Handler handler = new Handler();
-        bundle1.putCharSequence("RSA",bundle.getString("RSA"));
+        bundle1.putCharSequence("RSAKey",bundle.getString("RSAKey"));
         bundle1.putCharSequence("userID",bundle.getString("userID"));
         bundle1.putCharSequence("login_password",bundle.getString("login_password"));
         back.setOnClickListener(new OnClickListener() {
@@ -85,11 +86,11 @@ public class ProceedActivity extends Activity implements SinVoicePlayer.Listener
                 ProceedActivity.this.finish();
             }
         });
-        send.setEnabled(true);
+//        send.setEnabled(true);
         send.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                payID_txt.setText("111");
+//                payID_txt.setText("111");
                 if (count_edt.getText().toString().trim().equals("")){
                     new AlertDialog.Builder(ProceedActivity.this)
                             .setTitle("系统消息")
@@ -104,7 +105,8 @@ public class ProceedActivity extends Activity implements SinVoicePlayer.Listener
                     now = System.currentTimeMillis();
                     RSA_message = bundle.getString("userID") + " " + payID_txt.getText().toString().trim() + " "+now+ " " + count_edt.getText().toString().trim()+ " "+"content";
                     try {
-                        message = "tradeFromPayee" +" " + bundle.getString("userID") + " " + new String(RSAUtil.encryptByPublicKey(RSA_message.getBytes(),bundle.getString("RSA")),"ISO-8859-1");
+                        message = "tradeFromPayee" +" " + bundle.getString("userID") + " " + RSA.encrypt(RSA_message,RSA.getPublicKey(bundle.getString("RSAKey")));
+//                        message = "tradeFromPayee" +" " + bundle.getString("userID") + " " + encryptBase64(RSAUtil.encryptByPublicKey(("111"+" "+"9"+" "+"1506700887466"+" "+"10000"+" "+"content").getBytes(),bundle.getString("RSA")));
                     } catch (Exception e) {
                         Toast.makeText(ProceedActivity.this, "转码失败", Toast.LENGTH_LONG).show();
                     }
@@ -121,6 +123,7 @@ public class ProceedActivity extends Activity implements SinVoicePlayer.Listener
                                 while (true) {
                                     stateCode = reader.readLine();
                                     if (stateCode!=null){
+                                        Toast.makeText(ProceedActivity.this, stateCode, Toast.LENGTH_LONG).show();
                                         if (stateCode.contains("Error")) {
                                             handler.post(new Runnable() {
                                                 @Override

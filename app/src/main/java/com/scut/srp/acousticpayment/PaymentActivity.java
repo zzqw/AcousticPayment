@@ -73,7 +73,7 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
         final Bundle bundle = intent.getExtras();
         final Bundle bundle1 = new Bundle();
         final Handler handler = new Handler();
-        bundle1.putCharSequence("RSA",bundle.getString("RSA"));
+        bundle1.putCharSequence("RSAKey",bundle.getString("RSAKey"));
         bundle1.putCharSequence("userID",bundle.getString("userID"));
         bundle1.putCharSequence("login_password",bundle.getString("login_password"));
         back.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +88,7 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
                 PaymentActivity.this.finish();
             }
         });
-        send.setEnabled(true);
+//        send.setEnabled(true);
         send.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
@@ -182,18 +182,18 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
         receive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                mSinVoicePlayer.play(VoiceOutHelper.modify(bundle.getString("userID")), true, 1000);
-//                new Thread() {
-//                    @Override
-//                    public void run() {
-//                        try {
-//                            Thread.sleep(5000);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                        mSinVoicePlayer.stop();
-//                    }
-//                }.start();
+                mSinVoicePlayer.play(VoiceOutHelper.modify(bundle.getString("userID")), true, 1000);
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(5000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        mSinVoicePlayer.stop();
+                    }
+                }.start();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

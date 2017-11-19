@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -84,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        bundle.putCharSequence("RSA",return_message);
+                                        bundle.putCharSequence("RSAKey",return_message);
                                         new AlertDialog.Builder(LoginActivity.this)
                                                 .setTitle("系统消息")
                                                 .setMessage("登录成功！")

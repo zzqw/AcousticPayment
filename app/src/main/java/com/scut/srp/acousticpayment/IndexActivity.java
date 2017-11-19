@@ -44,7 +44,7 @@ public class IndexActivity extends AppCompatActivity {
         final Handler handler=new Handler();
         final Bundle bundle = intent.getExtras();
         final Bundle bundle1=new Bundle();
-        bundle1.putCharSequence("RSA",bundle.getString("RSA"));
+        bundle1.putCharSequence("RSAKey",bundle.getString("RSAKey"));
         bundle1.putCharSequence("userID",bundle.getString("userID"));
         bundle1.putCharSequence("login_password",bundle.getString("login_password"));
         pay.setOnClickListener(new View.OnClickListener(){
