@@ -24,6 +24,7 @@ public class IndexActivity extends AppCompatActivity {
     private Button receive;
     private Button check;
     private Button test;
+    private Button back;
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader reader;
@@ -31,6 +32,7 @@ public class IndexActivity extends AppCompatActivity {
 
     public void init(){
         pay=(Button)findViewById(R.id.pay);
+        back=(Button)findViewById(R.id.backtologin);
         receive=(Button)findViewById(R.id.receive);
         check=(Button)findViewById(R.id.check);
         test=(Button)findViewById(R.id.test);
@@ -47,6 +49,15 @@ public class IndexActivity extends AppCompatActivity {
         bundle1.putCharSequence("RSAKey",bundle.getString("RSAKey"));
         bundle1.putCharSequence("userID",bundle.getString("userID"));
         bundle1.putCharSequence("login_password",bundle.getString("login_password"));
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(IndexActivity.this,LoginActivity.class);
+                startActivity(intent);
+                IndexActivity.this.finish();
+            }
+        });
         pay.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -54,7 +65,6 @@ public class IndexActivity extends AppCompatActivity {
                 intent.setClass(IndexActivity.this,PaymentActivity.class);
                 intent.putExtras(bundle1);
                 startActivity(intent);
-                IndexActivity.this.finish();
             }
         });
         test.setOnClickListener(new View.OnClickListener(){
@@ -73,7 +83,6 @@ public class IndexActivity extends AppCompatActivity {
                 intent.setClass(IndexActivity.this,ProceedActivity.class);
                 intent.putExtras(bundle1);
                 startActivity(intent);
-                IndexActivity.this.finish();
             }
         });
         check.setOnClickListener(new View.OnClickListener() {

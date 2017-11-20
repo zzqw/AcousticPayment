@@ -45,7 +45,7 @@ public class ProceedActivity extends Activity implements SinVoicePlayer.Listener
     private String payID="";
     private String string="等待接收付款方ID";
 
-    private final static String TAG = "MainActivity";
+    private final static String TAG = "ProceedActivity";
     private final static String CODEBOOK = "1234567";
 
 
@@ -91,7 +91,7 @@ public class ProceedActivity extends Activity implements SinVoicePlayer.Listener
         send.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                payID_txt.setText("111");
+//                payID_txt.setText("124");
                 if (count_edt.getText().toString().trim().equals("")){
                     new AlertDialog.Builder(ProceedActivity.this)
                             .setTitle("系统消息")
@@ -108,9 +108,8 @@ public class ProceedActivity extends Activity implements SinVoicePlayer.Listener
                     try {
                         message = "tradeFromPayee" +" " + bundle.getString("userID") + " " + RSA.encrypt(RSA_message,RSA.getPublicKey(bundle.getString("RSAKey")));
                     } catch (Exception e) {
-                        Toast.makeText(ProceedActivity.this, "转码失败", Toast.LENGTH_LONG).show();
+                        Log.e(TAG,"RSA encrypt error!");
                     }
-                    Toast.makeText(ProceedActivity.this, message, Toast.LENGTH_LONG).show();
                     new Thread(new Runnable() {
                         @Override
                         public void run() {

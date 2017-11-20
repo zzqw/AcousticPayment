@@ -14,9 +14,9 @@ import com.scut.srp.acousticpayment.sinvoice.SinVoiceRecognition;
 import java.util.Random;
 
 public class Test extends AppCompatActivity implements SinVoicePlayer.Listener, VoiceInHelper.Listener {
-    private final static String TAG = "MainActivity";
+    private final static String TAG = "TestActivity";
 
-    private final static String CODEBOOK = "12345";
+    private final static String CODEBOOK = "1234567";
 
     private SinVoicePlayer mSinVoicePlayer;
     private SinVoiceRecognition mRecognition;

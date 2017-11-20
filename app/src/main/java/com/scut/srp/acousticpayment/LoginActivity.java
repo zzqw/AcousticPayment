@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -67,16 +68,9 @@ public class LoginActivity extends AppCompatActivity {
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        new AlertDialog.Builder(LoginActivity.this)
-                                                .setTitle("系统消息")
-                                                .setMessage("账号或密码错误！")
-                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        userID_edt.setText("");
-                                                        userID_edt.requestFocus();
-                                                    }
-                                                }).show();
+                                        Toast.makeText(LoginActivity.this, "账号或密码错误！", Toast.LENGTH_LONG).show();
+                                        login_password_edt.setText("");
+                                        login_password_edt.requestFocus();
                                     }
                                 });
                             } else{
@@ -84,21 +78,14 @@ public class LoginActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         bundle.putCharSequence("RSAKey",return_message);
-                                        new AlertDialog.Builder(LoginActivity.this)
-                                                .setTitle("系统消息")
-                                                .setMessage("登录成功！")
-                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        bundle.putCharSequence("userID",userID);
-                                                        bundle.putCharSequence("login_password",login_password);
-                                                        Intent intent = new Intent();
-                                                        intent.setClass(LoginActivity.this,IndexActivity.class);
-                                                        intent.putExtras(bundle);
-                                                        startActivity(intent);
-                                                        LoginActivity.this.finish();
-                                                    }
-                                                }).show();
+                                        bundle.putCharSequence("userID",userID);
+                                        bundle.putCharSequence("login_password",login_password);
+                                        Toast.makeText(LoginActivity.this, "登录成功！", Toast.LENGTH_LONG).show();
+                                        Intent intent = new Intent();
+                                        intent.setClass(LoginActivity.this,IndexActivity.class);
+                                        intent.putExtras(bundle);
+                                        startActivity(intent);
+                                        LoginActivity.this.finish();
                                     }
                                 });
                             }

@@ -43,7 +43,7 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
     private BufferedReader reader;
     private String stateCode;
     private String[] receive_message;
-    private final static String TAG = "MainActivity";
+    private final static String TAG = "PaymentActivity";
     private final static String CODEBOOK = "1234567";
     private String proceedID = "";
 
@@ -106,7 +106,6 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
                     now = System.currentTimeMillis();
                     String md5_message = MD5.getMD5(bundle.getString("userID")+bundle.getString("login_password") + md5_pay_password + String.valueOf(now));
                     message ="tradeFromPayer"+" "+receive_message[0]+" "+  bundle.getString("userID") + " " + String.valueOf(now)+" "+receive_message[1]+ " " +md5_message;
-                    Toast.makeText(PaymentActivity.this, message, Toast.LENGTH_LONG).show();
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -208,7 +207,7 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
                     @Override
                     public void run() {
                         try {
-                            Thread.sleep(5000);
+                            Thread.sleep(4000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
