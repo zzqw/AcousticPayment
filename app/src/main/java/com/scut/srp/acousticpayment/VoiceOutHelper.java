@@ -11,16 +11,16 @@ public class VoiceOutHelper {
     private static final Map<Character, String> outMap = new HashMap<>();
 
     static {
-        outMap.put('0', "123");
-        outMap.put('1', "124");
-        outMap.put('2', "125");
-        outMap.put('3', "132");
-        outMap.put('4', "134");
-        outMap.put('5', "135");
-        outMap.put('6', "142");
-        outMap.put('7', "143");
-        outMap.put('8', "145");
-        outMap.put('9', "152");
+        outMap.put('0', "14");
+        outMap.put('1', "15");
+        outMap.put('2', "16");
+        outMap.put('3', "17");
+        outMap.put('4', "24");
+        outMap.put('5', "25");
+        outMap.put('6', "26");
+        outMap.put('7', "27");
+        outMap.put('8', "34");
+        outMap.put('9', "35");
     }
 
     public static String modify(String s) {

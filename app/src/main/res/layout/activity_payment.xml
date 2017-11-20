@@ -80,8 +80,28 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/count_edt"
+        android:text="请先点击发送按钮，等待接收需付金额"
+        android:layout_below="@+id/back"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="34dp"
-        android:text="请先点击发送按钮，等待接收需付金额" />
+        android:layout_marginTop="22dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27dp"
+        android:text="收款方："
+        android:layout_below="@+id/textView3"
+        android:layout_toLeftOf="@+id/count_edt"
+        android:layout_toStartOf="@+id/count_edt" />
+
+    <TextView
+        android:id="@+id/proceed_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="请等待接收收款方ID"
+        android:layout_alignBaseline="@+id/textView"
+        android:layout_alignBottom="@+id/textView"
+        android:layout_toRightOf="@+id/textView"
+        android:layout_toEndOf="@+id/textView" />
 </RelativeLayout>

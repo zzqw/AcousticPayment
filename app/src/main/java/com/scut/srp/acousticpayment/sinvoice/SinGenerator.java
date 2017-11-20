@@ -57,7 +57,7 @@ public class SinGenerator {
     }
 
     public static interface Callback {
-        Buffer.BufferData getGenBuffer();
+        BufferData getGenBuffer();
 
         void freeGenBuffer(BufferData buffer);
     }

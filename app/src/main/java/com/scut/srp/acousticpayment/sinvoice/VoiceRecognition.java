@@ -25,9 +25,9 @@ public class VoiceRecognition {
     private final static int STATE_STOP = 2;
     private final static int STEP1 = 1;
     private final static int STEP2 = 2;
-    private final static int INDEX[] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 6, -1, -1, -1, -1, 5, -1, -1, -1, 4, -1, -1, 3,
-            -1, -1, 2, -1, -1, 1, -1, -1, 0};
-    private final static int MAX_SAMPLING_POINT_COUNT = 31;
+    private final static int INDEX[] = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8, -1, -1, -1, -1, 7, -1, -1, -1, 6, -1, -1, 5,
+            -1, -1, 4, -1, -1, 3, -1, -1, 2, -1, -1, 1, -1, -1, 0};
+    private final static int MAX_SAMPLING_POINT_COUNT = 37;
     private final static int MIN_REG_CIRCLE_COUNT = 8;
 
     private int mState;
@@ -216,6 +216,18 @@ public class VoiceRecognition {
         case 31:
         case 32:
             samplingPointCount = 31;
+            break;
+
+        case 33:
+        case 34:
+        case 35:
+            samplingPointCount = 34;
+            break;
+
+        case 36:
+        case 37:
+        case 38:
+            samplingPointCount = 37;
             break;
 
         default:

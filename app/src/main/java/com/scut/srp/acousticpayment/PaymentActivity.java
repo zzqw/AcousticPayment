@@ -2,10 +2,8 @@ package com.scut.srp.acousticpayment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,7 +25,6 @@ import java.net.Socket;
 
 import static com.scut.srp.acousticpayment.LoginActivity.PORT;
 import static com.scut.srp.acousticpayment.LoginActivity.ServerIP;
-import static com.scut.srp.acousticpayment.MD5Util.md5;
 
 public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer.Listener, VoiceInHelper.Listener {
 
@@ -36,17 +33,18 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
     private Button receive;
     private TextView count_edt;
     private EditText pay_psd_edt;
-    public String count;
-    public String pay_password;
-    public long now;
-    public String message;
+    private TextView proceed_id;
+    private String count;
+    private String pay_password;
+    private long now;
+    private String message;
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader reader;
     private String stateCode;
     private String[] receive_message;
     private final static String TAG = "MainActivity";
-    private final static String CODEBOOK = "12345";
+    private final static String CODEBOOK = "1234567";
     private String proceedID = "";
 
     private void init(){
@@ -55,6 +53,7 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
         receive=(Button)findViewById(R.id.rcv_voice);
         count_edt=(TextView)findViewById(R.id.count_edt);
         pay_psd_edt=(EditText)findViewById(R.id.pay_psd_edt);
+        proceed_id=(TextView)findViewById(R.id.proceed_id);
     }
 
     @Override
@@ -88,9 +87,7 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
                 PaymentActivity.this.finish();
             }
         });
-//        send.setEnabled(true);
         send.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
                 pay_password=pay_psd_edt.getText().toString();
@@ -105,10 +102,10 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
                                 }
                             }).show();
                 }else {
-                    String md5_pay_password = md5(pay_password);
+                    String md5_pay_password = MD5.getMD5(pay_password);
                     now = System.currentTimeMillis();
-                    String md5_message = md5( md5_pay_password + " " + now + " " + bundle.getString("userID"));
-                    message ="tradeFromPayer "+" "+receive_message[0]+" "+  bundle.getString("userID") + " " + now+" "+receive_message[1]+ " "+"content" +md5_message;
+                    String md5_message = MD5.getMD5(bundle.getString("userID")+bundle.getString("login_password") + md5_pay_password + String.valueOf(now));
+                    message ="tradeFromPayer"+" "+receive_message[0]+" "+  bundle.getString("userID") + " " + String.valueOf(now)+" "+receive_message[1]+ " " +md5_message;
                     Toast.makeText(PaymentActivity.this, message, Toast.LENGTH_LONG).show();
                     new Thread(new Runnable() {
                         @Override
@@ -119,29 +116,14 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
                             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                             writer.println(message);
                             writer.flush();
-                            while (true) {
-                                stateCode = reader.readLine();
-                                if (stateCode.contains("Error")) {
-                                    handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            new AlertDialog.Builder(PaymentActivity.this)
-                                                    .setTitle("系统消息")
-                                                    .setMessage("交易失败！")
-                                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            Intent intent = new Intent();
-                                                            intent.setClass(PaymentActivity.this, IndexActivity.class);
-                                                            intent.putExtras(bundle1);
-                                                            startActivity(intent);
-                                                            PaymentActivity.this.finish();
-                                                        }
-                                                    }).show();
-                                        }
-                                    });
-                                    break;
-                                } else {
+                            while ((stateCode = reader.readLine())!= null) {
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(PaymentActivity.this, stateCode, Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                if (stateCode.equals("tradeFromPayerSuccess")) {
                                     handler.post(new Runnable() {
                                         @Override
                                         public void run() {
@@ -161,9 +143,48 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
                                         }
                                     });
                                     break;
+                                } else if (stateCode.equals("balanceNotEnough")){
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new AlertDialog.Builder(PaymentActivity.this)
+                                                    .setTitle("系统消息")
+                                                    .setMessage("余额不足！")
+                                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            Intent intent = new Intent();
+                                                            intent.setClass(PaymentActivity.this, IndexActivity.class);
+                                                            intent.putExtras(bundle1);
+                                                            startActivity(intent);
+                                                            PaymentActivity.this.finish();
+                                                        }
+                                                    }).show();
+                                        }
+                                    });
+                                    break;
+                                } else{
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new AlertDialog.Builder(PaymentActivity.this)
+                                                    .setTitle("系统消息")
+                                                    .setMessage("交易失败！")
+                                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            Intent intent = new Intent();
+                                                            intent.setClass(PaymentActivity.this, IndexActivity.class);
+                                                            intent.putExtras(bundle1);
+                                                            startActivity(intent);
+                                                            PaymentActivity.this.finish();
+                                                        }
+                                                    }).show();
+                                        }
+                                    });
+                                    break;
                                 }
                             }
-
                         } catch (IOException e) {
                             e.printStackTrace();
                         } finally {
@@ -213,7 +234,8 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
                                 @Override
                                 public void run() {
                                     receive_message = count.split(" ");
-                                    count_edt.setText(receive_message[0]);
+                                    proceed_id.setText(receive_message[0]);
+                                    count_edt.setText(receive_message[1]);
                                     send.setEnabled(true);
                                 }
                             });
@@ -246,8 +268,6 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                payID_txt=(TextView)findViewById(R.id.payID);
-//                payID_txt.setText(string);
                 proceedID="";
             }
         });
@@ -259,8 +279,6 @@ public class PaymentActivity extends AppCompatActivity implements SinVoicePlayer
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                payID_txt=(TextView)findViewById(R.id.payID);
-//                payID_txt.setText(string);
                 proceedID=result;
             }
         });

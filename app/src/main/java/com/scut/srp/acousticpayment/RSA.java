@@ -39,7 +39,7 @@ public class RSA {
             Key key = (Key) keyMap.get(PUBLIC_KEY);
             //byte[] publicKey = key.getEncoded();
             //编码返回字符串
-            return Base64.encodeToString(key.getEncoded(),Base64.DEFAULT);
+            return Base64.encodeToString(key.getEncoded(),Base64.NO_WRAP);
         } catch (Exception e) {
             e.printStackTrace();
             return "error";
@@ -53,7 +53,7 @@ public class RSA {
             Key key = (Key) keyMap.get(PRIVATE_KEY);
             //byte[] privateKey = key.getEncoded();
             //编码返回字符串
-            return Base64.encodeToString(key.getEncoded(),Base64.DEFAULT);
+            return Base64.encodeToString(key.getEncoded(),Base64.NO_WRAP);
         } catch (Exception e) {
             e.printStackTrace();
             return "error";
@@ -80,7 +80,7 @@ public class RSA {
 
     //将base64编码后的公钥字符串转成PublicKey实例
     public static PublicKey getPublicKey(String publicKey) throws Exception{
-        byte[] keyBytes=Base64.decode(publicKey.getBytes(),Base64.DEFAULT);
+        byte[] keyBytes=Base64.decode(publicKey.getBytes(),Base64.NO_WRAP);
         X509EncodedKeySpec keySpec=new X509EncodedKeySpec(keyBytes);
         KeyFactory keyFactory=KeyFactory.getInstance(KEY_ALGORITHM);
         return (RSAPublicKey)keyFactory.generatePublic(keySpec);
@@ -88,7 +88,7 @@ public class RSA {
 
     //将base64编码后的私钥字符串转成PrivateKey实例
     public static PrivateKey getPrivateKey(String privateKey) throws Exception{
-        byte[] keyBytes= Base64.decode(privateKey.getBytes(),Base64.DEFAULT);
+        byte[] keyBytes= Base64.decode(privateKey.getBytes(),Base64.NO_WRAP);
         PKCS8EncodedKeySpec keySpec=new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory keyFactory=KeyFactory.getInstance(KEY_ALGORITHM);
         return keyFactory.generatePrivate(keySpec);
@@ -102,7 +102,7 @@ public class RSA {
     }
     //String->String版
 	public static String encrypt(String content, PublicKey publicKey) throws Exception{
-		return Base64.encodeToString(encrypt(content.getBytes(),publicKey),Base64.DEFAULT);
+		return Base64.encodeToString(encrypt(content.getBytes(),publicKey),Base64.NO_WRAP);
 	}
     //私钥解密
     public static byte[] decrypt(byte[] content, PrivateKey privateKey) throws Exception{
@@ -112,6 +112,6 @@ public class RSA {
     }
 	//String->String版
 	public static String decrypt(String content, PrivateKey privateKey) throws Exception{
-		return new String(decrypt(Base64.decode(content,Base64.DEFAULT),privateKey));
+		return new String(decrypt(Base64.decode(content,Base64.NO_WRAP),privateKey));
 	}
 }

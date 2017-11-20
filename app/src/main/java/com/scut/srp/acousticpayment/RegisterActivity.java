@@ -15,11 +15,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import static com.scut.srp.acousticpayment.LoginActivity.PORT;
 import static com.scut.srp.acousticpayment.LoginActivity.ServerIP;
-import static com.scut.srp.acousticpayment.MD5Util.md5;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -115,7 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
                         public void run() {
                             try{
                                 socket=new Socket(ServerIP,PORT);
-                                String message="register"+" "+userID+" "+login_password1+" "+md5(password1);
+                                String message="register"+" "+userID+" "+login_password1+" "+MD5.getMD5(password1);
                                 writer = new PrintWriter(socket.getOutputStream(),true);
                                 reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                                 writer.println(message);
@@ -144,7 +142,6 @@ public class RegisterActivity extends AppCompatActivity {
                                     handler.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            //差保存RSA公钥的代码
                                             new AlertDialog.Builder(RegisterActivity.this)
                                                     .setTitle("系统消息")
                                                     .setMessage("注册成功！")

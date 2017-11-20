@@ -13,16 +13,16 @@ public class VoiceInHelper {
     private static final Map<String, String> inMap = new HashMap<>();
 
     static {
-        inMap.put("123", "0");
-        inMap.put("124", "1");
-        inMap.put("125", "2");
-        inMap.put("132", "3");
-        inMap.put("134", "4");
-        inMap.put("135", "5");
-        inMap.put("142", "6");
-        inMap.put("143", "7");
-        inMap.put("145", "8");
-        inMap.put("152", "9");
+        inMap.put("14", "0");
+        inMap.put("15", "1");
+        inMap.put("16", "2");
+        inMap.put("17", "3");
+        inMap.put("24", "4");
+        inMap.put("25", "5");
+        inMap.put("26", "6");
+        inMap.put("27", "7");
+        inMap.put("34", "8");
+        inMap.put("35", "9");
     }
 
     public interface Listener {
@@ -54,7 +54,7 @@ public class VoiceInHelper {
             if (!isError && null != sb1 && null != sb2) {
                 sb2.append(ch);
                 i++;
-                if (i == 3) {
+                if (i == 2) {
                     String s = inMap.get(sb2.toString());
                     sb2 = new StringBuilder();
                     if (null != s) {

@@ -31,7 +31,7 @@ public class SinVoicePlayer implements Encoder.Listener, Encoder.Callback, PcmPl
     private final static int STATE_STOP = 2;
     private final static int STATE_PENDING = 3;
 
-    private final static int DEFAULT_GEN_DURATION = 20;
+    private final static int DEFAULT_GEN_DURATION = 35;
 
     private String mCodeBook;
     private List<Integer> mCodes = new ArrayList<Integer>();

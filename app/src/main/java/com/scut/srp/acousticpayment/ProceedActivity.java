@@ -34,18 +34,19 @@ public class ProceedActivity extends Activity implements SinVoicePlayer.Listener
     private Button receive;
     private EditText count_edt;
     private TextView payID_txt;
-    public long now;
-    public String message;
+    private long now;
+    private String message;
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader reader;
     private String stateCode;
+    private String proceedCode;
     private String RSA_message;
     private String payID="";
     private String string="等待接收付款方ID";
 
     private final static String TAG = "MainActivity";
-    private final static String CODEBOOK = "12345";
+    private final static String CODEBOOK = "1234567";
 
 
     private void init(){
@@ -90,7 +91,7 @@ public class ProceedActivity extends Activity implements SinVoicePlayer.Listener
         send.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                payID_txt.setText("111");
+                payID_txt.setText("111");
                 if (count_edt.getText().toString().trim().equals("")){
                     new AlertDialog.Builder(ProceedActivity.this)
                             .setTitle("系统消息")
@@ -106,7 +107,6 @@ public class ProceedActivity extends Activity implements SinVoicePlayer.Listener
                     RSA_message = bundle.getString("userID") + " " + payID_txt.getText().toString().trim() + " "+now+ " " + count_edt.getText().toString().trim()+ " "+"content";
                     try {
                         message = "tradeFromPayee" +" " + bundle.getString("userID") + " " + RSA.encrypt(RSA_message,RSA.getPublicKey(bundle.getString("RSAKey")));
-//                        message = "tradeFromPayee" +" " + bundle.getString("userID") + " " + encryptBase64(RSAUtil.encryptByPublicKey(("111"+" "+"9"+" "+"1506700887466"+" "+"10000"+" "+"content").getBytes(),bundle.getString("RSA")));
                     } catch (Exception e) {
                         Toast.makeText(ProceedActivity.this, "转码失败", Toast.LENGTH_LONG).show();
                     }
@@ -120,53 +120,87 @@ public class ProceedActivity extends Activity implements SinVoicePlayer.Listener
                                 reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                                 writer.println(message);
                                 writer.flush();
-                                while (true) {
-                                    stateCode = reader.readLine();
-                                    if (stateCode!=null){
-                                        Toast.makeText(ProceedActivity.this, stateCode, Toast.LENGTH_LONG).show();
-                                        if (stateCode.contains("Error")) {
-                                            handler.post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    new AlertDialog.Builder(ProceedActivity.this)
-                                                            .setTitle("系统消息")
-                                                            .setMessage("交易失败！")
-                                                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(DialogInterface dialog, int which) {
-                                                                    Intent intent = new Intent();
-                                                                    intent.setClass(ProceedActivity.this, IndexActivity.class);
-                                                                    intent.putExtras(bundle1);
-                                                                    startActivity(intent);
-                                                                    ProceedActivity.this.finish();
-                                                                }
-                                                            }).show();
-                                                }
-                                            });
-                                            break;
-                                        } else {
-                                            handler.post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    new AlertDialog.Builder(ProceedActivity.this)
-                                                            .setTitle("系统消息")
-                                                            .setMessage("交易成功！")
-                                                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(DialogInterface dialog, int which) {
-                                                                    Intent intent = new Intent();
-                                                                    intent.setClass(ProceedActivity.this, IndexActivity.class);
-                                                                    intent.putExtras(bundle1);
-                                                                    startActivity(intent);
-                                                                    ProceedActivity.this.finish();
-                                                                }
-                                                            }).show();
-                                                }
-                                            });
-                                            break;
+                                while ((proceedCode = reader.readLine())!=null) {
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(ProceedActivity.this, proceedCode, Toast.LENGTH_LONG).show();
                                         }
+                                    });
+                                    if (proceedCode.equals("insert success")) {
+                                        while ((stateCode = reader.readLine())!=null) {
+                                            handler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(ProceedActivity.this, stateCode, Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+                                            if (stateCode.equals("tradeFromPayerSuccess")) {
+                                                handler.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(ProceedActivity.this, stateCode, Toast.LENGTH_LONG).show();
+                                                        new AlertDialog.Builder(ProceedActivity.this)
+                                                                .setTitle("系统消息")
+                                                                .setMessage("交易成功！")
+                                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(DialogInterface dialog, int which) {
+                                                                        Intent intent = new Intent();
+                                                                        intent.setClass(ProceedActivity.this, IndexActivity.class);
+                                                                        intent.putExtras(bundle1);
+                                                                        startActivity(intent);
+                                                                        ProceedActivity.this.finish();
+                                                                    }
+                                                                }).show();
+                                                    }
+                                                });
+                                                break;
+                                            }else if (stateCode.equals("balanceNotEnough")){
+                                                handler.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        new android.support.v7.app.AlertDialog.Builder(ProceedActivity.this)
+                                                                .setTitle("系统消息")
+                                                                .setMessage("付款方余额不足！")
+                                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(DialogInterface dialog, int which) {
+                                                                        Intent intent = new Intent();
+                                                                        intent.setClass(ProceedActivity.this, IndexActivity.class);
+                                                                        intent.putExtras(bundle1);
+                                                                        startActivity(intent);
+                                                                        ProceedActivity.this.finish();
+                                                                    }
+                                                                }).show();
+                                                    }
+                                                });
+                                                break;
+                                            } else {
+                                                handler.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(ProceedActivity.this, stateCode, Toast.LENGTH_LONG).show();
+                                                        new AlertDialog.Builder(ProceedActivity.this)
+                                                                .setTitle("系统消息")
+                                                                .setMessage("交易失败！")
+                                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(DialogInterface dialog, int which) {
+                                                                        Intent intent = new Intent();
+                                                                        intent.setClass(ProceedActivity.this, IndexActivity.class);
+                                                                        intent.putExtras(bundle1);
+                                                                        startActivity(intent);
+                                                                        ProceedActivity.this.finish();
+                                                                    }
+                                                                }).show();
+                                                    }
+                                                });
+                                                break;
+                                            }
+                                        }
+                                        break;
                                     }
-
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();

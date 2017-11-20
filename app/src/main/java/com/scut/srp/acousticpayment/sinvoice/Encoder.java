@@ -25,9 +25,9 @@ public class Encoder implements SinGenerator.Listener, SinGenerator.Callback {
     private final static int STATE_ENCODING = 1;
     private final static int STATE_STOPED = 2;
 
-    // index 0, 1, 2, 3, 4, 5, 6
-    // sampling point Count 31, 28, 25, 22, 19, 15, 10
-    private final static int[] CODE_FREQUENCY = { 1422, 1575, 1764, 2004, 2321, 2940, 4410 };
+    // index 0, 1, 2, 3, 4, 5, 6, 7, 8
+    // sampling point Count 37, 34, 31, 28, 25, 22, 19, 15, 10
+    private final static int[] CODE_FREQUENCY = { 1191, 1297, 1422, 1575, 1764, 2004, 2321, 2940, 4410 };
     private int mState;
 
     private SinGenerator mSinGenerator;
